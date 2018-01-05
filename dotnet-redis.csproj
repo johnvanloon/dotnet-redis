@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="stackexchange.redis" Version="1.2.6" />
+    <PackageReference Include="stackexchange.redis.extensions.protobuf" Version="2.3.0" />
+    <PackageReference Include="system.configuration" Version="2.0.5" />
+    <PackageReference Include="system.configuration.configurationmanager" Version="4.4.1" />
+  </ItemGroup>
+</Project>
