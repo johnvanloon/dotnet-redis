@@ -4,6 +4,8 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="google.protobuf" Version="3.5.1" />
+    <PackageReference Include="google.protobuf.tools" Version="3.5.1" />
     <PackageReference Include="stackexchange.redis" Version="1.2.6" />
     <PackageReference Include="stackexchange.redis.extensions.protobuf" Version="2.3.0" />
     <PackageReference Include="system.configuration" Version="2.0.5" />

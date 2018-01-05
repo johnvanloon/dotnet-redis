@@ -8,7 +8,7 @@ using ProtoBuf;
 namespace dotnet_redis
 {
     [ProtoContract]
-    struct Person
+    struct MyPerson
     {
         [ProtoMember(1)]
         string Name {get;set;}
@@ -17,7 +17,7 @@ namespace dotnet_redis
         [ProtoMember(3)]
         private bool _isMale {get;set;}
 
-        public Person(string name, int age, bool isMale)
+        public MyPerson(string name, int age, bool isMale)
         {
             Name = name;
             Age = age;
@@ -31,7 +31,7 @@ namespace dotnet_redis
         {
             Console.WriteLine("Hello John!");
             var redis = ConnectionMultiplexer.Connect("localhost");
-            ReadProto(redis);
+            TestPlain(redis);
         }
 
         private static void ReadProto(ConnectionMultiplexer redis)    
@@ -47,17 +47,27 @@ namespace dotnet_redis
         {
             var serializer = new ProtobufSerializer();
             var cacheClient = new StackExchangeRedisCacheClient(serializer, "localhost");
-            var obj = new Person("john", 35, true);
-            cacheClient.Add("proto", obj);
+            var obj = new Person();
+            obj.Age = 1;
+            obj.Name = "abc";
+            obj.Trueornot = false;
+            var buf = new byte[obj.CalculateSize()];
+            obj.WriteTo(new Google.Protobuf.CodedOutputStream(buf));
+            var db = redis.GetDatabase();
+            db.StringSet("protofilestuff", buf);
+
+            // cacheClient.Add("protowithfile", obj);
         }
 
         private static void TestPlain(ConnectionMultiplexer redis)
         {
             var db = redis.GetDatabase();
             var value = "john";
-            db.StringSet("key", value);
+            // db.StringSet("key", value);
 
-            Console.WriteLine($"Value from redis: {db.StringGet("a")}");
+            var readvalue = db.StringGet("protofilestuff");
+            var p = Person.Parser.ParseFrom(readvalue);
+            Console.WriteLine($"Value from redis: {p.Name}");
         }
     }
 }
